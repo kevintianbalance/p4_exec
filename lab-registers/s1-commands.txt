@@ -1,0 +1,7 @@
+//TODO 5: add rules in the standard forwarding table to forward packets 
+//        from port 1 to port 2 and from port 2 to port 1
+
+//TODO 6: add rules in the table matching tcp.syn and tcp.fin
+//        If input port=1, tcp.syn=1 and tcp.fin=0 => enable  interarrival time measurements
+//        If input port=1, tcp.syn=0 and tcp.fin=1 => disable interarrival time measurements
+
