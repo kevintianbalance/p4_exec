@@ -89,7 +89,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "repeater.p4",
-        "line" : 80,
+        "line" : 89,
         "column" : 8,
         "source_fragment" : "MyDeparser"
       },
@@ -101,7 +101,60 @@
   "register_arrays" : [],
   "calculations" : [],
   "learn_lists" : [],
-  "actions" : [],
+  "actions" : [
+    {
+      "name" : "repeater55",
+      "id" : 0,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0002"
+            }
+          ],
+          "source_info" : {
+            "filename" : "repeater.p4",
+            "line" : 55,
+            "column" : 12,
+            "source_fragment" : "standard_metadata.egress_spec = 2"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "repeater59",
+      "id" : 1,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0001"
+            }
+          ],
+          "source_info" : {
+            "filename" : "repeater.p4",
+            "line" : 59,
+            "column" : 12,
+            "source_fragment" : "standard_metadata.egress_spec = 1"
+          }
+        }
+      ]
+    }
+  ],
   "pipelines" : [
     {
       "name" : "ingress",
@@ -112,17 +165,129 @@
         "column" : 8,
         "source_fragment" : "MyIngress"
       },
-      "init_table" : null,
-      "tables" : [],
+      "init_table" : "node_2",
+      "tables" : [
+        {
+          "name" : "tbl_repeater55",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "repeater.p4",
+            "line" : 55,
+            "column" : 42,
+            "source_fragment" : "="
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [0],
+          "actions" : ["repeater55"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "repeater55" : null
+          },
+          "default_entry" : {
+            "action_id" : 0,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_repeater59",
+          "id" : 1,
+          "source_info" : {
+            "filename" : "repeater.p4",
+            "line" : 59,
+            "column" : 42,
+            "source_fragment" : "="
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [1],
+          "actions" : ["repeater59"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "repeater59" : null
+          },
+          "default_entry" : {
+            "action_id" : 1,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        }
+      ],
       "action_profiles" : [],
-      "conditionals" : []
+      "conditionals" : [
+        {
+          "name" : "node_2",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "repeater.p4",
+            "line" : 53,
+            "column" : 12,
+            "source_fragment" : "standard_metadata.ingress_port == 1"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "==",
+              "left" : {
+                "type" : "field",
+                "value" : ["standard_metadata", "ingress_port"]
+              },
+              "right" : {
+                "type" : "hexstr",
+                "value" : "0x0001"
+              }
+            }
+          },
+          "true_next" : "tbl_repeater55",
+          "false_next" : "node_4"
+        },
+        {
+          "name" : "node_4",
+          "id" : 1,
+          "source_info" : {
+            "filename" : "repeater.p4",
+            "line" : 57,
+            "column" : 17,
+            "source_fragment" : "standard_metadata.ingress_port == 2"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "==",
+              "left" : {
+                "type" : "field",
+                "value" : ["standard_metadata", "ingress_port"]
+              },
+              "right" : {
+                "type" : "hexstr",
+                "value" : "0x0002"
+              }
+            }
+          },
+          "false_next" : null,
+          "true_next" : "tbl_repeater59"
+        }
+      ]
     },
     {
       "name" : "egress",
       "id" : 1,
       "source_info" : {
         "filename" : "repeater.p4",
-        "line" : 62,
+        "line" : 71,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },
@@ -173,7 +338,7 @@
       ["standard_metadata", "priority"]
     ]
   ],
-  "program" : "/home/p4/p4-tools/p4-learning/exercises/02-Repeater/repeater.p4i",
+  "program" : "/media/sf_KevinTian/K0_KTH/IK2217_AdvancednternetworkingII/P0_Project/P4/exercises/02-Repeater/repeater.p4i",
   "__meta__" : {
     "version" : [2, 18],
     "compiler" : "https://github.com/p4lang/p4c"
